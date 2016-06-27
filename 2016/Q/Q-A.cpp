@@ -13,7 +13,7 @@ where x is the test case number (starting from 1) and y is the last number that 
 according to the rules described in the statement.
 */
 
-#include "stdafx.h"
+//#include "stdafx.h"
 #include <iostream>
 
 int getLastNumber(int N) {
@@ -25,8 +25,8 @@ int main()
 	using namespace std;
 	int T, N;
 	cin >> T;
-	for (int i = 1; i++; i <= T) {
+	for (int i = 1; i <= T; i++) {
 		cin >> N;
-		cout << "Case : " << i << getLastNumber(N) << endl;
+		cout << "Case " << i << ": " << getLastNumber(N) << endl;
 	}
 }
