@@ -13,11 +13,21 @@ where x is the test case number (starting from 1) and y is the last number that 
 according to the rules described in the statement.
 */
 
-//#include "stdafx.h"
+//#include "windows.h"
 #include <iostream>
 
 int getLastNumber(int N) {
-	return 0;
+	int m = 0;
+	int x = 0;
+	do{
+		x += N;
+		int y = x;
+		while(y){
+			m |= 1 << (y%10);
+			y /= 10;
+		}
+	}while(m < (1 << 10) - 1);
+	return x;
 }
 
 int main()
@@ -27,6 +37,9 @@ int main()
 	cin >> T;
 	for (int i = 1; i <= T; i++) {
 		cin >> N;
-		cout << "Case " << i << ": " << getLastNumber(N) << endl;
+		cout << "Case " << i << ": ";
+		if(N==0){cout << "INSOMNIA" << endl;}
+		else{cout << getLastNumber(N) << endl;}
 	}
+	return 0;
 }
