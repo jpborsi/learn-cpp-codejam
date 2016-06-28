@@ -13,7 +13,6 @@ where x is the test case number (starting from 1) and y is the last number that 
 according to the rules described in the statement.
 */
 
-//#include "windows.h"
 #include <iostream>
 
 int getLastNumber(int N) {
@@ -37,7 +36,7 @@ int main()
 	cin >> T;
 	for (int i = 1; i <= T; i++) {
 		cin >> N;
-		cout << "Case " << i << ": ";
+		cout << "Case #" << i << ": ";
 		if(N==0){cout << "INSOMNIA" << endl;}
 		else{cout << getLastNumber(N) << endl;}
 	}
