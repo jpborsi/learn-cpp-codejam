@@ -17,19 +17,24 @@ Output: For each test case, output one line containing "Case #x: y", where x is 
 */
 
 #include <iostream>
+#include <stdlib.h>
 using namespace std;
 
 int numberOfFriends(int Smax, char* S){
-	return Smax;
+	int sum = 0, shyness = 0, maxDif = 0;
+	for(shyness; shyness <= Smax; shyness++){
+		maxDif = max(maxDif,shyness-sum);
+		sum += *S++ - '0';	
+	}
+	return maxDif;
 }
 
 int main() {
 	int T, Smax;
+	char* S = (char*) malloc(1001*sizeof(char));
 	cin >> T;
 	for(int i = 1; i <= T; i++){
-		cin >> Smax;
-		char S[Smax];
-		cin >> S;
+		cin >> Smax >> S;
 		cout << "Case #" << i << ": " << numberOfFriends(Smax,S) << endl;
 	}
 	return 0;
