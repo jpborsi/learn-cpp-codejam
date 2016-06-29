@@ -37,5 +37,6 @@ int main() {
 		cin >> Smax >> S;
 		cout << "Case #" << i << ": " << numberOfFriends(Smax,S) << endl;
 	}
+	free(S);
 	return 0;
 }
