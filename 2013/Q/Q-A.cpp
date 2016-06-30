@@ -15,19 +15,23 @@ When you run your code on the sample input, it should create the sample output e
 */
 
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 
-int getGameState(char board[4][4]){
+int getGameState(char* board[4]){
 	return 0;
 }
 
 int main(){
 	int T;
-	char board[4][4];
+	char* board[4];
 	cin >> T;
 	for(int i = 1; i <= T; i++){
-		for(int j = 0; j<4; j++){cin >> board[j];}
+		for(int j = 0; j<4; j++){
+			board[j] = (char*) malloc(4*sizeof(char));
+			cin >> board[j];
+		}
 		cout << "Case #" << i << ": ";
 		switch(getGameState(board)){
 			case 0: cout << "Game has not completed" << endl; break;
