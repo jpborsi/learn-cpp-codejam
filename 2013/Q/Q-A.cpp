@@ -24,22 +24,25 @@ int getGameState(char* board[4]){
 	int Xt = 0, Ot = 0;
 	for(int i=0;i<4;i++){
 		int m = 1;
+		Xt = 0, Ot = 0;
 		for(int j=0;j<4;j++){
 			//cout << i << "," << j << endl;
 			Xt += m*1*(board[i][j] == 'X' || board[i][j] == 'T');
-			Xt += m*2*(board[j][i] == 'X' || board[i][j] == 'T');
+			Xt += m*2*(board[j][i] == 'X' || board[j][i] == 'T');
 			Ot += m*1*(board[i][j] == 'O' || board[i][j] == 'T');
-			Ot += m*2*(board[i][j] == 'O' || board[i][j] == 'T');
+			Ot += m*2*(board[j][i] == 'O' || board[j][i] == 'T');
 			fill |= (board[i][j]=='.');
-			m *= 2;
+			//cout << m << Xt << endl;
+			m *= 4;
 		}
 		Xt += m*1*(board[i][i] == 'X' || board[i][i] == 'T');
-		Xt += m*2*(board[3-i][3-i] == 'X' || board[3-i][3-i] == 'T');
+		Xt += m*2*(board[i][3-i] == 'X' || board[i][3-i] == 'T');
 		Ot += m*1*(board[i][i] == 'O' || board[i][i] == 'T');
-		Ot += m*2*(board[3-i][3-i] == 'O' || board[3-i][3-i] == 'T');
+		Ot += m*2*(board[i][3-i] == 'O' || board[i][3-i] == 'T');
+		//cout << Xt << "," << Xwin << endl;
 		Xwin &= Xt;
 		Owin &= Ot;
-		cout << Xt << "," << Xwin << endl;
+		
 	}
 
 	if(Xwin>0){return 2;}
