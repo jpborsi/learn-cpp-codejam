@@ -12,22 +12,28 @@ and y is either "ON" or "OFF", indicating the state of the light bulb.
 */
 
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
-int isLightOn(int N, int K){
-	return 0;
+bool isLightOn(int N, int K){
+	//cout << pow(2,N) << endl;
+	//cout << (K - pow(2,N) - 1) << endl;
+	if(K < pow(2,N) - 1){ return false;}
+	return (K - (int)pow(2,N) + 1) % ((int)pow(2,N)) == 0;
 }
 
 int main(){
-	int T;
+	int T, N, K;
 	cin >> T;
 	for(int i = 1; i <= T; i++){
 		cin >> N >> K;
 		cout << "Case #" << i << ": ";
-		switch(isLightOn(N,K)){
-			case 0: cout << "OFF" << endl; break;
-			case 1: cout << "ON" << endl; break;
+		if(isLightOn(N,K)){
+			cout << "ON" << endl;
+		}
+		else{
+			cout << "OFF" << endl;
 		}
 	}
 	return 0;
