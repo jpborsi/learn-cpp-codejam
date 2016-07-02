@@ -14,11 +14,31 @@ Output: For each test case, output one line containing "Case #x: y", where x is 
 and y is the minimum number of seconds required for the robots to push the given buttons, in order.
 */
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 
-int getMinSeconds(char*, int*){
-	return 0;
+int getMinSeconds(char* R, int* P, int N){
+	int currentLocation[2] = {1,1};
+	int timeSince[2] = {0,0};
+	int totalTime = 0;
+	for(int i = 0; i < N; i++){
+		int color = (R[i]=='B');
+		int distance = abs(P[i] - currentLocation[color]);
+		if(timeSince[color] > distance){
+			currentLocation[color] = P[i];
+			timeSince[color] = 0;
+			timeSince[1-color]++;
+			totalTime++;
+		}else{
+			int t = distance - timeSince[color];
+			currentLocation[color] = P[i];
+			timeSince[color] = 0;
+			timeSince[1-color] += 1+t;
+			totalTime += 1+t;
+		}
+	}
+	return totalTime;
 }
 
 int main(){
@@ -33,6 +53,6 @@ int main(){
 		for(int j = 0; j<N; j++){
 			cin >> R[j] >> P[j];
 		}
-		cout << "Case #" << i << ": " << getMinSeconds(R,P) << endl;
+		cout << "Case #" << i << ": " << getMinSeconds(R,P,N) << endl;
 	}
 }
