@@ -25,7 +25,7 @@ int getMatches(string pattern, string* language, int L, int D){
 		for(int j = 0; j < pattern.length(); ++j){
 			if(pattern[j] == '('){
 				bool matchSubPattern = false;
-				while(pattern[j++]!=')'){
+				while(pattern[++j]!=')'){
 					if(pattern[j]==language[i][wordPos]){matchSubPattern = true;}
 				}
 				if(!matchSubPattern){break;}
