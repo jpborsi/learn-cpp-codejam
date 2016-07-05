@@ -20,16 +20,34 @@ where X is the number of the test case and Y is the number of search engine swit
 */
 
 #include <iostream>
+#include <unordered_map>
+#include <string>
 
 using namespace std;
 
 int getNumSwitches(string* engines, string* queries, int S, int Q){
-	return 0;
+	unordered_map<string, int> engine_ids;
+	for (int i = 0; i < S; ++i)
+	{
+		engine_ids[engines[i]] = i;
+	}
+	int numSwitches = 0;
+	int maps_accessed = 0;
+	for (int i = 0; i < Q; ++i){
+		if (maps_accessed == (1 << S)-1){
+			maps_accessed = 1 << engine_ids[queries[i-1]];
+			numSwitches++;
+		}
+		maps_accessed |= 1 << engine_ids[queries[i]];
+		cout << maps_accessed << endl;
+	}
+	return numSwitches;
 }
 
 int main(){
 	int N, S, Q;
-	string* engines, queries;
+	string* engines;
+	string* queries;
 	cin >> N;
 	for (int i = 1; i <= N; ++i)
 	{
