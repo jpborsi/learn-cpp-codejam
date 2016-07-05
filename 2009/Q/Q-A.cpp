@@ -18,20 +18,36 @@ where X is the test case number, starting from 1, and K indicates how many words
 
 using namespace std;
 
-int getMatches(char* pattern, char** language){
-	return 0;
+int getMatches(string pattern, string* language, int L, int D){
+	int numMatches = 0;
+	for (int i = 0; i < D; ++i){
+		int wordPos = 0;
+		for(int j = 0; j < pattern.length(); ++j){
+			if(pattern[j] == '('){
+				bool matchSubPattern = false;
+				while(pattern[j++]!=')'){
+					if(pattern[j]==language[i][wordPos]){matchSubPattern = true;}
+				}
+				if(!matchSubPattern){break;}
+			}else{
+				if(pattern[j]!=language[i][wordPos]){break;}
+			}
+			if(++wordPos==L){numMatches++;}
+		}
+	}
+	return numMatches;
 }
 
 int main(){
 	int L, D, N;
 	cin >> L >> D >> N;
-	char language[D][L];
+	string language[D];
 	for(int i = 0; i < D; i++){
 		cin >> language[i];
 	}
 	for(int i = 1; i <= N; i++){
-		char* pattern = (char*) malloc(L*28*sizeof(char));
+		string pattern;
 		cin >> pattern;
-		cout << "Case #" << i << ": " << getMatches(pattern, language) << endl;
+		cout << "Case #" << i << ": " << getMatches(pattern, language, L, D) << endl;
 	}
 }
