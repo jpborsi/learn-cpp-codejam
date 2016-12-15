@@ -22,22 +22,21 @@ where X is the number of the test case and Y is the number of search engine swit
 #include <iostream>
 #include <unordered_map>
 #include <string>
-#include <algorithm>
 
 using namespace std;
 
 int getNumSwitches(string* engines, string* queries, int S, int Q){
 	unordered_map<string, int> engine_ids;
-	bool engines_accessed[S] {};
-	for (int i = 0; i < S; ++i){
+	for (int i = 0; i < S; ++i)
+	{
 		engine_ids[engines[i]] = i;
 	}
 	int numSwitches = 0;
+	int maps_accessed = 0;
 	for (int i = 0; i < Q; ++i){
-		engines_accessed[engine_ids[queries[i]]] = true;
-		if (all_of(&engines_accessed[0],&engines_accessed[S-1], [](bool i){return i;})){
-			fill(&engines_accessed[0],&engines_accessed[S-1],0);
-			engines_accessed[engine_ids[queries[i]]] = true;
+		maps_accessed |= 1 << engine_ids[queries[i]];
+		if (maps_accessed == (1 << S)-1){
+			maps_accessed = 1 << engine_ids[queries[i]];
 			numSwitches++;
 		}
 	}
