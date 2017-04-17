@@ -20,11 +20,79 @@ For each test case, output one line containing "Case #x: " followed by the numbe
 #include <stdlib.h>
 #include <string>
 #include <vector>
+#include <sstream>
 
 using namespace std;
 
 string getTrainsRequired(int T, int NA, int NB, vector<string> departA, vector<string> departB, vector<string> arriveA, vector<string> arriveB){
-	return "6 Words";
+	sort(departA.begin(),departA.end());
+	sort(departB.begin(),departB.end());
+	//sort(arriveA.begin(),arriveA.end());
+	//sort(arriveB.begin(),arriveB.end());
+
+	vector<string> availA, availB;
+
+	char* s = (char*) malloc(5*sizeof(char));
+	for(string a : arriveA){
+		int hour = stoi(a.substr(0,2));
+		int minute = stoi(a.substr(3,2));
+		if(minute + T >= 60){
+			hour++;
+		}
+		minute = (minute + T)%60;
+		sprintf(s,"%02d:%02d",hour,minute);
+		availA.push_back(string(s));
+	}
+
+	for(string b : arriveB){
+		int hour = stoi(b.substr(0,2));
+		int minute = stoi(b.substr(3,2));
+		if(minute + T >= 60){
+			hour++;
+		}
+		minute = (minute + T)%60;
+		sprintf(s,"%02d:%02d",hour,minute);
+		availB.push_back(string(s));
+	}
+
+	sort(availA.begin(),availA.end());
+	sort(availB.begin(),availB.end());
+
+	int startAtA = 0, startAtB = 0;
+	auto itA = departA.begin();
+	auto itB = departB.begin();
+	auto arA = availA.begin();
+	auto arB = availB.begin();
+
+	
+
+	while(itA != departA.end() || itB != departB.end()){
+		if(itA!= departA.end() && (itB == departB.end() || *itA < *itB)){
+			//cout << *itA << endl;
+			//cout << "\t" << *arA << endl;
+			if(arA != availA.end() && *itA >= *arA){
+				itA++;
+				arA++;
+			}else{
+				itA++;
+				startAtA++;
+			}
+		}else{
+			//cout << *itB << endl;
+			//cout << "\t" << *arB << endl;
+			if(arB != availB.end() && *itB >= *arB){
+				itB++;
+				arB++;
+			}else{
+				itB++;
+				startAtB++;
+			}
+		}
+	}
+
+	stringstream result;
+	result << startAtA << " " << startAtB;
+	return result.str();
 }
 
 int main(){
@@ -32,6 +100,10 @@ int main(){
 	vector<string> departA, departB, arriveA, arriveB;
 	cin >> N;
 	for(int i=1; i<=N; i++){
+		departA.clear();
+		departB.clear();
+		arriveA.clear();
+		arriveB.clear();
 		cin >> T >> NA >> NB;
 		string depart, arrive;
 		for(int j = 0; j < NA; j++){
