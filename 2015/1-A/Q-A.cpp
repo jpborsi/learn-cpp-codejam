@@ -11,15 +11,37 @@ Output: For each test case, output one line containing "Case #x: y z", where x i
 */
 
 #include <iostream>
+#include <algorithm>
+#include <cmath>
 
 using namespace std;
 
 int getY(int N, int* array){
-	return 0;
+	int sum = 0;
+	for(int i = 0; i < N - 1; i++){
+		sum += max(array[i] - array[i+1],0);
+	}
+	return sum;
 }
 
 int getZ(int N, int* array){
-	return 0;
+	int max = 0;
+	for(int i = 0; i < N - 1; i++){
+		int test = array[i] - array[i+1];
+		if(test > max){
+			max = test;
+		}
+	}
+	int sum = 0;
+	for(int i = 0; i < N - 1; i++){
+		int test = array[i];
+		if(test < max){
+			sum += test;
+		}else{
+			sum += max;
+		}
+	}
+	return sum;
 }
 
 int main(){
