@@ -13,51 +13,24 @@ Output: For each test case, output one line containing "Case #x: y", where x is 
 and y is the smallest number of minutes needed to finish the breakfast.
 */
 
-//Not a valid solution
-
 #include <iostream>
-#include <stdlib.h>
-#include <algorithm>
+#include <assert.h>
 #include <cmath>
 using namespace std;
 
 int numberOfMinutes(int* array, int D){
-	sort(array, array+D, greater<int>());
-	int numMinutes = 0;
-	int greatest_stack = array[0];
-	int threshold = ceil(1.0*greatest_stack/2);
-	int numOfStacksToFlip = 0;
-	for(int i = 0; i < D; ++i){
-		if(greatest_stack <= 3){
-			numMinutes += greatest_stack;
-			return numMinutes;
-		}else if(array[i] > threshold){
-			numOfStacksToFlip += 1;
-		}else{
-			if(numOfStacksToFlip >= threshold){
-				return numMinutes + greatest_stack;
-			}else{
-				numMinutes += numOfStacksToFlip;
-				greatest_stack = threshold;
-				threshold = ceil(1.0*threshold/2);
-				numOfStacksToFlip = numOfStacksToFlip*2;
-				if(array[i] > threshold){numOfStacksToFlip++;}
-			}
+	int minMinutes = 1001;
+	for(int x = 1; x <= 1000; x++){
+		int sumMoves = 0;
+		for(int i = 0; i < D; i++){
+			sumMoves += max(0,int(ceil(1.0*array[i]/x - 1)));
 		}
-
-	}
-	while(true){
-		if(numOfStacksToFlip >= threshold || greatest_stack <= 3){
-			return numMinutes + greatest_stack;
-		}else{
-			numMinutes += numOfStacksToFlip;
-			greatest_stack = threshold;
-			threshold = ceil(1.0*threshold/2);
-			numOfStacksToFlip = numOfStacksToFlip*2;
+		if(sumMoves + x < minMinutes){
+			minMinutes = sumMoves + x;
 		}
 	}
-
-	return numMinutes;
+	assert(minMinutes < 1001);
+	return minMinutes;
 }
 
 int main() {
