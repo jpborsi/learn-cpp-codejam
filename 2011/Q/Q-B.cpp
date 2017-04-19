@@ -20,63 +20,94 @@ Please see the sample output for examples.
 */
 
 #include <iostream>
-#include <iomanip>
-#include <vector>
-#include <unordered_map>
 #include <string>
+#include <set>
+#include <map>
+#include <vector>
+#include <utility>
 using namespace std;
 
-vector<string> getResult(int C, vector<string> combines, int D, vector<string> opposeds, int N, string invoked){
-	unordered_map<string,string> combineMap = processCombines(C, combines);
-	set<string> opposedSet = processOpposeds(D, opposeds);
-	vector<char> result;
-	map<char, int> currentlyContained;
-	int i = 0;
-	char newChar = invoked[i];
-	while(true){
-		if(result.empty()){
-			result.push_back(newChar);
-			currentlyContained.emplace(newChar, 1);
+vector<char> getResult(map<string, char> combinations, set<pair<char,char> > opposed, string invoked){
+	string out = "";
+	set<char> currentCharacters;
+	int stringLength = 0;
+	for(int i = 0; i < invoked.length(); i++){
+		//cout << out << endl;
+		if(stringLength == 0){
+			out += invoked[i];
+			currentCharacters.insert(invoked[i]);
+			stringLength++;
 		}else{
-			string checkCombine = "" + result.last() + newChar;
-			
+			string potentialCombination = "";
+			potentialCombination += out[stringLength-1];
+			potentialCombination += invoked[i];
+			if(combinations.find(potentialCombination) != combinations.end()){
+				out = out.substr(0,stringLength-1);
+				out += combinations[potentialCombination];
+				currentCharacters.clear();
+				for(int k = 0; k < stringLength; k++){
+					currentCharacters.insert(out[k]);
+				}
+			}else{
+				for(char c : currentCharacters){
+					if(opposed.find(make_pair(c,invoked[i])) != opposed.end()){
+						out = "";
+						currentCharacters.clear();
+						stringLength = 0;
+						break;
+					}
+				}
+				if(!out.empty()){
+					out += invoked[i];
+					currentCharacters.insert(invoked[i]);
+					stringLength++;
+				}
+			}
 		}
-		i++;
-		if(i > N){ return result; }
 	}
+	vector<char> result;
+	for(int i =0; i < stringLength; i++){
+		result.push_back(out[i]);
+	}
+	return result;
 }
 
 int main(){
 	int T, C, D, N;
-	vector<string> combine, opposed;
-	combine.reserve(36);
-	opposed.reserve(28);
+	map<string, char> combinations;
+	set<pair<char,char>> opposed;
 	string invoked;
+	string temp;
 	cin >> T;
 	for(int i = 1; i <= T; i++){
+		combinations.clear();
+		opposed.clear();
 		cin >> C;
-		string temp;
 		for(int j = 0; j < C; j++){
 			cin >> temp;
-			combine.push_back(temp);
+			combinations.insert(make_pair(temp.substr(0,2),temp[2]));
+			string temp2 = "";
+			temp2 += temp[1];
+			temp2 += temp[0];
+			combinations.insert(make_pair(temp2,temp[2]));
 		}
 		cin >> D;
 		for(int j = 0; j < D; j++){
 			cin >> temp;
-			opposed.push_back(temp);
+			opposed.insert(make_pair(temp[0], temp[1]));
+			opposed.insert(make_pair(temp[1], temp[0]));
 		}
 		cin >> N;
 		cin >> invoked;
-
-		cout << "Case #" << i << ": [";
-		vector<string> result = getResult(C, combine, D, opposed, N, invoked);
-		if(result.size() == 0){
-			cout << "]" << endl;
+		vector<char> result = getResult(combinations, opposed, invoked);
+		if(result.empty()){
+			cout << "Case #" << i << ": " << "[]" << endl;
 		}else{
-			cout << result[1];
-			for(vector<string>::size_type i = 1; i != result.size(); i++){
-				cout << ", " << result[i];
+			cout << "Case #" << i << ": " << "[";
+			for(int j = 0; j < result.size()-1;j++){
+				cout << result[j] << ", ";
 			}
-			cout << "]" << endl;
+			cout << result[result.size()-1] << "]" << endl;
+		}
 	}
 }
