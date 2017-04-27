@@ -4,7 +4,7 @@ Learning C++ by coding all google code jam problems.
 ## Current Status
 |Year|Done     |WIP   |
 |----|---------|------|
-|2008|QAB      |      |
+|2008|QAB, 1A.A|      |
 |2009|QAB      |      |
 |2010|QAB      |      |
 |2011|QAB, 1A.A|      |
