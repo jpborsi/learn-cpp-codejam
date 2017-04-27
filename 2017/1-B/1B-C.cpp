@@ -6,6 +6,8 @@
 #include <queue>
 #include <tuple>
 #include <cstdlib>
+#include <cassert>
+#include <map>
 
 using namespace std;
 
@@ -18,19 +20,29 @@ char* getTime(int N, vector<int> horse_range, vector<int> horse_speed, int* dist
 	double time = 1.0*distanceToNextTown/myfirsthorse_speed;
 	int range_left = myfirsthorse_range - distanceToNextTown;
 	myChoices.push(make_tuple(1,time,myfirsthorse,range_left));
-	double minTime = 1000000001.0;
+	double minTime = -1.0;
+	map<tuple<int,int,int>,double> previouslySeen;
 	while(!myChoices.empty()){
 		tuple<int,double,int,int> entry = myChoices.front();
 		myChoices.pop();
+		tuple<int,int,int> tt = make_tuple(get<0>(entry),get<2>(entry),get<3>(entry));
+		if(previouslySeen.find(tt) != previouslySeen.end() && previouslySeen[tt] < get<1>(entry)){
+			continue;
+		}
+		previouslySeen[tt] = get<1>(entry);
 		int currentCity = get<0>(entry);
+		//cout << currentCity << endl;
 		if(currentCity == N-1){
 			double time = get<1>(entry);
-			if(time < minTime){
+			if(minTime < 0 || time < minTime){
 				minTime = time;
 			}
 			continue;
 		}
 		if(get<3>(entry)<0){
+			continue;
+		}
+		if(minTime > 0 && get<1>(entry) > minTime){
 			continue;
 		}
 		int distanceToNextTown = distances[currentCity*N+currentCity+1];
@@ -44,10 +56,12 @@ char* getTime(int N, vector<int> horse_range, vector<int> horse_speed, int* dist
 		int old_range = get<3>(entry);
 		int new_range = horse_range[new_horse];
 
-		myChoices.push(make_tuple(currentCity+1,time+old_time,old_horse,old_range-distanceToNextTown));
+		if(old_range > distanceToNextTown){
+			myChoices.push(make_tuple(currentCity+1,time+old_time,old_horse,old_range-distanceToNextTown));
+		}
 		myChoices.push(make_tuple(currentCity+1,time+new_time,new_horse,new_range-distanceToNextTown));
 	}
-
+	assert(minTime > 0);
 	char *result = (char*)malloc(24*sizeof(char));
 	sprintf(result,"%.6f",minTime);
 	return result;
