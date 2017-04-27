@@ -15,19 +15,38 @@ Output: For each test case, output one line containing "Case #x: y", where x is 
 using namespace std;
 
 bool canPaint(long long int startingRings, long long int amountOfPaint, long long int possible){
-	return amountOfPaint > 2*possible*possible + 4*startingRings*possible + 4*possible;
+	//cout << possible << endl;
+	//cout << possible*(2*startingRings + 2*possible - 1) << endl;
+	return amountOfPaint >= (possible)*(2*startingRings+1) + 2*possible*(possible-1);
 }
 
-long long int getRings(int R, int P){
-	int checkRings = 2;
+long long int getRings(long long int R, long long int P){
+	long long int checkRings = 2;
 	while(canPaint(R,P,checkRings)){
 		checkRings <<= 1;
 	}
-	return checkRings;
+	long long int a = checkRings >> 1;
+	long long int b = checkRings;
+	//cout << checkRings << endl;
+	while(a!=b){
+		//cout << a << ", " << b << endl;
+		if(canPaint(R,P,b)){
+			return b;
+		}
+		long long int midpoint = (b-a)/2 + a;
+		if(canPaint(R,P,midpoint)){
+			if(a == midpoint){ return a; }
+			a = midpoint;
+		}else{
+			b = midpoint;
+		}
+	}
+	return a;
 }
 
 int main(){
-	int T, R, P;
+	int T;
+	long long int R, P;
 	cin >> T;
 	for(int i = 1; i <= T; i++){
 		cin >> R >> P;

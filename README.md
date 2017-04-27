@@ -9,7 +9,7 @@ Learning C++ by coding all google code jam problems.
 |2010|QAB      |      |
 |2011|QAB      |      |
 |2012|QAB      |      |
-|2013|QAB      |1A.A  |
+|2013|QAB, 1A.A|      |
 |2014|QAB, 1A.A|      |
 |2015|QAB, 1A.A|      |
 |2016|QAB, 1A.A|      |
