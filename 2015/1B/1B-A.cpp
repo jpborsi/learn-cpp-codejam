@@ -11,7 +11,7 @@ Output: For each test case, output one line containing "Case #x: y", where x is 
 */
 
 long long int getNumbersToSay(string N){
-
+	
 	return 0;
 }
 
