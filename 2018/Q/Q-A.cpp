@@ -1,40 +1,56 @@
 #include <iostream>
 #include <string>
+#include <math.h>
 using namespace std;
 
-int getMinFlips(string s, int K) {
-	int numPancakes = s.size();
-	int numFlips = 0;
-	for(int i = 0; i < numPancakes-K+1; i++){
-		if (s[i] == '-'){
-			numFlips++;
-			for(int j = 0; j < K; j++){
-				if(s[i+j] == '-'){
-					s[i+j] = '+';
-				}else{
-					s[i+j] = '-';
-				}
-			}
+int getMinHacks(long D, string P) {
+	int shotStrength [30] = {};
+	int numShots = 0;
+	int numCharges = 0;
+	long totalDamage = 0;
+	long currentStrength = 1;
+	for(int i = 0; i < P.size(); i++){
+		if(P[i] == 'C'){
+			currentStrength *= 2;
+			numCharges++;
+		}else{
+			shotStrength[numCharges]++;
+			numShots++;
+			totalDamage += currentStrength;
 		}
 	}
-	for(int i = 0; i < numPancakes; i++){
-		if (s[i] == '-'){ return -1; }
+	if(numShots > D){ return -1; }
+	else if(totalDamage <= D){ return 0; }
+
+	int minHacks = 0;
+	for(int i = 0; i < 30; i++){
+		int maxJ = 0;
+		for(int j = 0; j < P.size(); j++){
+			if(shotStrength[j]>0){
+				maxJ = j;
+			}
+		}
+		shotStrength[maxJ]--;
+		totalDamage -= pow(2, maxJ-1);
+		minHacks++;
+		if(totalDamage <= D){ return minHacks; }
 	}
-	return numFlips;
+	return -1;
 }
 
 int main()
 {
-	int T, K;
-	string s;
+	int T;
+	long D;
+	string P;
 	cin >> T;
 	for (int i = 1; i <= T; i++) {
-		cin >> s;
-		cin >> K;
+		cin >> D;
+		cin >> P;
 		cout << "Case #" << i << ": ";
-		int minFlips = getMinFlips(s,K);
-		if(minFlips==-1){cout << "IMPOSSIBLE" << endl;}
-		else{cout << minFlips << endl;}
+		int minHacks = getMinHacks(D,P);
+		if(minHacks==-1){cout << "IMPOSSIBLE" << endl;}
+		else{cout << minHacks << endl;}
 	}
 	return 0;
 }

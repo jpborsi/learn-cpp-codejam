@@ -1,40 +1,26 @@
 #include <iostream>
-#include <string>
+#include <math.h>
 using namespace std;
 
-int getMinFlips(string s, int K) {
-	int numPancakes = s.size();
-	int numFlips = 0;
-	for(int i = 0; i < numPancakes-K+1; i++){
-		if (s[i] == '-'){
-			numFlips++;
-			for(int j = 0; j < K; j++){
-				if(s[i+j] == '-'){
-					s[i+j] = '+';
-				}else{
-					s[i+j] = '-';
-				}
-			}
-		}
-	}
-	for(int i = 0; i < numPancakes; i++){
-		if (s[i] == '-'){ return -1; }
-	}
-	return numFlips;
+void getCoords(double A) {
+	double theta = acos( 0.5 * (A - sqrt(2-pow(A,2))));
+	double x1 = 0.5*sin(theta);
+	double y1 = 0.5*cos(theta);
+	cout << x1 << ' ' << y1 << ' ' << 0.0 << endl;
+	cout << -y1 << ' ' << x1 << ' ' << 0.0 << endl;
+	cout << 0.0 << ' ' << 0.0 << ' ' << 0.5 << endl;
 }
 
 int main()
 {
-	int T, K;
-	string s;
+	int T;
+	double A;
 	cin >> T;
 	for (int i = 1; i <= T; i++) {
-		cin >> s;
-		cin >> K;
-		cout << "Case #" << i << ": ";
-		int minFlips = getMinFlips(s,K);
-		if(minFlips==-1){cout << "IMPOSSIBLE" << endl;}
-		else{cout << minFlips << endl;}
+		cin >> A;
+		//if(A > 1.414213){break;}
+		cout << "Case #" << i << ": " << endl;
+		getCoords(A);
 	}
 	return 0;
 }
