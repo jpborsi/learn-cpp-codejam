@@ -1,66 +1,70 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
+#include <assert.h>
 
 using namespace std;
 
-string convert(int* mins, int N){
-	string nums ("0123456789");
-	string result ("");
-	for(int i = 0; i < N; i++){
-		result += nums[mins[i]];
+int convert(string S, int index){
+	assert(index < S.length());
+	int result = S[index] - '0';
+	assert(result < 10);
+	assert(result >= 0);
+	return result;
+}
+
+string nines(int length){
+	assert(length >= 0);
+	string result = "";
+	for(int i=0; i<length; i++){
+		result += '9';
 	}
 	return result;
 }
 
-string getLastTidyNumber(string N) {
-	string nums ("0123456789");
-	int overallMin = N[0] - '0';
-	int mins [N.size()];
-	for(int i = 0; i < N.size();i++){
-		//cout << N[i] << " " << N[i] - '0' << endl;
-		int val = N[i] - '0';
-		if(val < overallMin){
-			string result ("");
-			for(int j = i-1; j > 0; j--){
-				//cout << j << endl;
-				if(mins[j-1] < mins[j]){
-					mins[j] --;
-					for(int k = 0; k < j+1; k++){
-						result += nums[mins[k]];
-					}
-					for(int k = j+1; k < N.size(); k++){
-						result += '9';
-						
-					}
-					return result;
-				}
-			}
-			if(mins[0] == 1){
-				for(int i=0;i<N.size()-1;i++){
-					result += '9';
-				}
-				return result;
-			}else{
-				result += nums[mins[0]-1];
-				for(int i=1;i<N.size();i++){
-					result += '9';
-				}
-			}
-			return result;
-		}else if(val > overallMin){
-			overallMin = val;
-			mins[i] = val;
-		}else{
-			mins[i] = overallMin;
+bool isTidy(string N){
+	if(N.length() == 1){ return true; }
+	for(int i=1; i<N.length(); i++){
+		if(N[i] < N[i-1]){
+			return false;
 		}
 	}
-	string result;
-	for(int i=0;i<N.size();i++){
-		result += '0' + mins[i];
+	return true;
+}
+
+int firstMax(string N){
+	assert(N.length()>0);
+	int currentMax = 0;
+	int currentIndex = -1;
+	for(int i=0; i<N.length(); i++){
+		int t = convert(N,i);
+		if(t > currentMax){
+			currentMax = t;
+			currentIndex = i;
+		}
 	}
+	assert(currentIndex >= 0);
+	return currentIndex;
+}
+
+string getLastTidyNumber(string N) {
+	if(isTidy(N)){ return N; }
+	int startingNumber = convert(N, 0);
+	for(int i=1; i<N.length(); i++){
+		if(convert(N, i) < startingNumber){
+			int fM = firstMax(N.substr(0,i));
+			if(fM == 0 && startingNumber == 1){
+				return nines(N.length()-1);
+			}
+			string result = N.substr(0,fM) + to_string(convert(N,fM)-1) + nines(N.length()-fM-1);
+			assert(isTidy(result));
+			return result;
+		}
+	}
+	string result = to_string(startingNumber) + getLastTidyNumber(N.substr(1));
+	assert(isTidy(result));
+	assert(result.length() == N.length() || result.length() == N.length() - 1);
 	return result;
-	
 }
 
 int main()
