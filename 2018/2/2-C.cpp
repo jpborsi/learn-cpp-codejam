@@ -38,6 +38,7 @@ struct Graph {
     };
     int getMaxIndSetSize(){
         int size = 0;
+        //greedily create a maximal matching
         unordered_set<Vertex> temp_rows = rows;
         for(Vertex r: temp_rows){
             for(Vertex c: adjacency_list[r]){
@@ -51,6 +52,7 @@ struct Graph {
                 }
             }
         }
+        //refine matching with augmenting paths
         bool graphChanged = true;
         while(graphChanged && !rows.empty() && !cols.empty()){
             graphChanged = false;
@@ -76,7 +78,6 @@ struct Graph {
                         adjacency_list[current].erase(next);
                         adjacency_list[next].insert(current);
                     }
-                    //print();
                     break;
                 }else{
                     for(Vertex v : adjacency_list[lastNode]){
@@ -95,9 +96,6 @@ struct Graph {
 
 int solve(int N){
     unordered_map<int, Graph> costumes;
-    for(int i=-N; i<=N; i++){
-        costumes[i] = Graph();
-    }
     for(int r=0; r<N; r++){
         for(int c=0; c<N; c++){
             int A; cin >> A;
@@ -105,10 +103,8 @@ int solve(int N){
         }
     }
     int specialDancers = 0;
-    for(int i=-N; i<=N; i++){
-        if(costumes[i].empty()){continue;}
-        //costumes[i].print();
-        specialDancers += costumes[i].getMaxIndSetSize();
+    for(auto p : costumes){
+        specialDancers += p.second.getMaxIndSetSize();
     }
     return N*N - specialDancers;
 }
