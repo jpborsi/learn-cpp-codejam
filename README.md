@@ -15,4 +15,4 @@ Learning C++ by coding all google code jam problems.
 |2016|QAB, 1A.A, 1B.A, 2A|      |
 |2017|QABCD, 1A.A, 1B.A, 1C.A, 2A|1A.BC, 1B.BC, 1C.B|
 |2018|QABC, 1A.AB, 2ABC| QD, 1A.C |
-|2019|QABCD, 1A.B|1A.AC|
+|2019|QABCD, 1A.B, 1B.A|1A.AC|
