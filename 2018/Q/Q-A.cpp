@@ -1,61 +1,56 @@
 #include <iostream>
-#include <string>
-#include <math.h>
-#include <assert.h>
+#include <algorithm>
+#include <map>
+#include <tuple>
+
+typedef long long int ll;
+
 using namespace std;
 
-int getMinHacks(long D, string P) {
-	int shotStrength [30] = {};
+void solve(ll D, string P){
+	map<ll, int> damages;
+	ll currentDamage = 1;
+	ll totalDamage = 0;
 	int numShots = 0;
-	int numCharges = 0;
-	long totalDamage = 0;
-	long currentStrength = 1;
-	for(int i = 0; i < P.size(); i++){
-		if(P[i] == 'C'){
-			currentStrength *= 2;
-			numCharges++;
+	for(char c : P){
+		if(c=='C'){
+			currentDamage *= 2;
 		}else{
-			shotStrength[numCharges]++;
 			numShots++;
-			totalDamage += currentStrength;
+			damages[currentDamage]++;
+			totalDamage += currentDamage;
 		}
 	}
-	if(numShots > D){ return -1; }
-	else if(totalDamage <= D){ return 0; }
 
-	int minHacks = 0;
-	for(int i = 0; i < numShots*numCharges; i++){
-		int maxJ = 0;
-		for(int j = 0; j <= numCharges; j++){
-			if(shotStrength[j]>0){
-				maxJ = j;
-			}
-		}
-		assert(maxJ > 0);
-		shotStrength[maxJ]--;
-		shotStrength[maxJ-1]++;
-		int strengthDiff = 1 << (maxJ-1);
-		totalDamage -= strengthDiff;
-		minHacks++;
-		if(totalDamage <= D){ return minHacks; }
+	if(numShots>D){
+		cout << "IMPOSSIBLE"; return;
+	}else if (totalDamage<=D){
+		cout << "0"; return;
 	}
-	assert(false);
-	return -1;
+
+	int numHacks = 0;
+	while(totalDamage > D){
+		ll max = damages.rbegin()->first;
+		totalDamage -= max/2;
+		damages[max]--;
+		damages[max/2]++;
+		if(damages[max]==0){damages.erase(max);}
+		numHacks++;
+	}
+	cout << numHacks;
+	return;
+	
 }
 
-int main()
-{
+int main(){
 	int T;
-	long D;
+	ll D;
 	string P;
 	cin >> T;
-	for (int i = 1; i <= T; i++) {
-		cin >> D;
-		cin >> P;
-		cout << "Case #" << i << ": ";
-		int minHacks = getMinHacks(D,P);
-		if(minHacks==-1){cout << "IMPOSSIBLE" << endl;}
-		else{cout << minHacks << endl;}
+	for(int q=1; q<=T; ++q){
+		cin >> D >> P;
+		cout << "Case #" << q << ": ";
+		solve(D, P);
+		cout << endl;
 	}
-	return 0;
 }
